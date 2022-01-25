@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'package:dubu_timer/hive_model.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:dubu_timer/provider/global_provider.dart';
 
@@ -45,39 +47,75 @@ class _PomodoroState extends State<Pomodoro> {
     });
   }
 
+  List Items = [];
+  var closet;
+  late DynamicList listClass;
+
+  @override
+  void initState() {
+    super.initState();
+    closet = Provider.of<ListProvider>(context, listen: false);
+    listClass = DynamicList(closet.items);
+  }
+
+  Future<void> SaveModelValue() async {
+    final box = await Hive.box<HiveModel>('hiveModel');
+    int id = 1;
+    if (box.isNotEmpty) {
+      final Item = box.getAt(0);
+      print(id);
+    }
+    Items = closet.GetItems();
+    box.put(
+      id,
+      HiveModel(
+        coins: context.read<Counts>().count.floor(),
+        totalTime: context.read<Times>().totalTime,
+        itemList: Items,
+      ),
+    );
+    print(Provider.of<Counts>(context, listen: false));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
         backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () {
+              SaveModelValue();
+              Navigator.of(context).pop();
+            },
+          ),
         ),
-      ),
-      body: Container(
-        padding: EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(elapsedTime,
-                style: TextStyle(fontFamily: 'Kitto', fontSize: 25.0)),
-            SizedBox(height: 20.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                IconButton(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  onPressed: () => startOrStop(),
-                  icon: Image.asset('assets/button.png'),
-                  iconSize: 50,
-                )
-              ],
-            )
-          ],
+        body: Container(
+          padding: EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(elapsedTime,
+                  style: TextStyle(fontFamily: 'Kitto', fontSize: 25.0)),
+              SizedBox(height: 20.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  IconButton(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    onPressed: () => startOrStop(),
+                    icon: Image.asset('assets/button.png'),
+                    iconSize: 50,
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

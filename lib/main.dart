@@ -2,8 +2,13 @@ import 'package:dubu_timer/homePage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:dubu_timer/provider/global_provider.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'hive_model.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(HiveModelAdapter());
+  await Hive.openBox<HiveModel>('hiveModel');
   runApp(
     MultiProvider(
       providers: [

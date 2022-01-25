@@ -13,6 +13,11 @@ class Counts with ChangeNotifier {
     _count = _count - cost;
     notifyListeners();
   }
+
+  void update(double cost) {
+    _count = cost;
+    notifyListeners();
+  }
 }
 
 class Times with ChangeNotifier {
@@ -22,6 +27,10 @@ class Times with ChangeNotifier {
   void timeAdd(int elapsedtime) {
     _totalTime = elapsedtime + _totalTime;
     notifyListeners();
+  }
+
+  void update(int time) {
+    _totalTime = time;
   }
 }
 
@@ -38,10 +47,14 @@ class Check with ChangeNotifier {
     _check = 0;
     notifyListeners();
   }
+
+  void update(int checking) {
+    _check = checking;
+  }
 }
 
 class ListProvider extends ChangeNotifier {
-  List<int> items = [0];
+  List items = [0];
 
   void addItem(int item) {
     items.add(item);
@@ -57,13 +70,18 @@ class ListProvider extends ChangeNotifier {
     return items.length;
   }
 
-  List<int> GetItems() {
+  List GetItems() {
     return items;
+  }
+
+  void Update(List list) {
+    items = list;
+    notifyListeners();
   }
 }
 
 class DynamicList {
-  List<int> _item = [];
+  List _item = [];
   DynamicList(this._item);
 
   List get item => _item;

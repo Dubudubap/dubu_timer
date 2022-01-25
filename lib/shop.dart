@@ -1,5 +1,7 @@
+import 'package:dubu_timer/hive_model.dart';
 import 'package:flutter/material.dart';
 import 'package:dubu_timer/provider/global_provider.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:dubu_timer/shopping.dart';
 
@@ -20,6 +22,24 @@ class _shopState extends State<shop> {
     super.initState();
     ownedItems = Provider.of<ListProvider>(context, listen: false);
     listClass = DynamicList(ownedItems.items);
+  }
+
+  Future<void> SaveModelValue() async {
+    final box = await Hive.box<HiveModel>('hiveModel');
+    int id = 1;
+    if (box.isNotEmpty) {
+      final Item = box.getAt(0);
+      print(id);
+    }
+    box.put(
+      id,
+      HiveModel(
+        coins: context.read<Counts>().count.floor(),
+        totalTime: context.read<Times>().totalTime,
+        itemList: ownedItems.GetItems(),
+      ),
+    );
+    print(ownedItems.GetItems());
   }
 
   Widget buildShoppingCard(shopping Shopping) {
@@ -48,6 +68,7 @@ class _shopState extends State<shop> {
                       Shopping.inStock = false;
                       ownedItems.addItem(Shopping.num);
                       context.read<Item>().UpdateValue(ownedItems.Length());
+                      SaveModelValue();
                     }
                   : () {
                       Shopping.inStock = true;
@@ -85,7 +106,10 @@ class _shopState extends State<shop> {
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
           icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            print(ownedItems);
+            Navigator.of(context).pop();
+          },
         ),
       ),
       body: SafeArea(

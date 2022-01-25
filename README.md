@@ -1,6 +1,6 @@
 # dubu_timer
 
-A new Flutter project.
+a fun timer with dubu!
 
 ## Getting Started
 

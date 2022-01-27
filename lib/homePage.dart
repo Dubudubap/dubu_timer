@@ -27,13 +27,27 @@ class _HomePageState extends State<HomePage> {
     listClass = DynamicList(closet.items);
   }
 
-  var hat = 'assets/null.png';
-  var acc = 'assets/null.png';
-  var glasses = 'assets/null.png';
+  var goods = 'assets/null.png';
 
   void PlaySound(String soundName) {
     final _player = AudioCache();
     _player.play(soundName);
+  }
+
+  Future<void> SaveModelValue() async {
+    final box = await Hive.box<HiveModel>('hiveModel');
+    int id = 1;
+    if (box.isNotEmpty) {
+      final Item = box.getAt(0);
+    }
+    box.put(
+      id,
+      HiveModel(
+        coins: context.read<Counts>().count.floor(),
+        totalTime: context.read<Times>().totalTime,
+        itemList: closet.GetItems(),
+      ),
+    );
   }
 
   @override
@@ -45,6 +59,7 @@ class _HomePageState extends State<HomePage> {
         child: ValueListenableBuilder(
             valueListenable: Hive.box<HiveModel>('hiveModel').listenable(),
             builder: (context, Box<HiveModel> box, child) {
+              SaveModelValue();
               final item = box.getAt(0);
               return Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -58,6 +73,7 @@ class _HomePageState extends State<HomePage> {
                         alignment: Alignment.topRight,
                         onPressed: () {
                           context.read<Times>().update(item!.totalTime);
+                          print(item.totalTime);
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) => setting()));
                         },
@@ -69,6 +85,7 @@ class _HomePageState extends State<HomePage> {
                         highlightColor: Colors.transparent,
                         onPressed: () {
                           context.read<Counts>().update(item!.coins.toDouble());
+                          print(item.coins);
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) => coin()));
                         },
@@ -81,34 +98,25 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Image.asset(
                         'assets/White_Ca.png',
-                        height: MediaQuery.of(context).size.width / 2,
-                        width: MediaQuery.of(context).size.width / 2,
+                        height: 270,
+                        width: 270,
                       ),
                       Image.asset(
-                        glasses,
-                        height: MediaQuery.of(context).size.width / 2,
-                        width: MediaQuery.of(context).size.width / 2,
-                      ),
-                      Image.asset(
-                        acc,
-                        height: MediaQuery.of(context).size.width / 2,
-                        width: MediaQuery.of(context).size.width / 2,
-                      ),
-                      Image.asset(
-                        hat,
-                        height: MediaQuery.of(context).size.width / 2,
-                        width: MediaQuery.of(context).size.width / 2,
+                        goods,
+                        height: 270,
+                        width: 270,
                       ),
                       IconButton(
-                          onPressed: (context.watch<Check>().check == 1)
-                              ? () {
-                                  PlaySound('meow.m4a');
-                                }
-                              : null,
-                          splashColor: Colors.white,
-                          highlightColor: Colors.white,
-                          icon: Image.asset('assets/null.png'),
-                          iconSize: MediaQuery.of(context).size.width / 2),
+                        onPressed: (context.watch<Check>().check == 1)
+                            ? () {
+                                PlaySound('meow.m4a');
+                              }
+                            : null,
+                        splashColor: Colors.white,
+                        highlightColor: Colors.white,
+                        icon: Image.asset('assets/null.png'),
+                        iconSize: 270,
+                      ),
                     ],
                   ),
                   Row(
@@ -163,7 +171,7 @@ class _HomePageState extends State<HomePage> {
     ownedItems = closet.GetItems();
     var itemIndex = ownedItems[itemStocks];
     setState(() {
-      hat = ItemList().itemList[itemIndex];
+      goods = ItemList().itemList[itemIndex];
     });
   }
 }

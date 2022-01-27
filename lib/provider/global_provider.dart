@@ -99,10 +99,19 @@ class Item extends ChangeNotifier {
 class ItemList {
   List<String> itemList = [
     'assets/null.png',
-    'assets/space.png',
-    'assets/rocket.png',
-    'assets/punky.png',
-    'assets/gentleHat.png',
-    'assets/ribbon.png'
+    'assets/item1.png',
+    'assets/item2.png',
+    'assets/item3.png',
+    'assets/item4.png',
+    'assets/item5.png',
+    'assets/item6.png',
+    'assets/item7.png',
+    'assets/item8.png',
+    'assets/item9.png',
+    'assets/item10.png',
+    'assets/item11.png',
+    'assets/item12.png',
+    'assets/item13.png',
+    'assets/item14.png',
   ];
 }

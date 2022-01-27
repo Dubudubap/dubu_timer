@@ -39,6 +39,8 @@ dependencies:
   hive: ^2.0.5
   get: ^4.6.1
   hive_flutter: ^1.1.0
+  simple_url_preview: ^3.0.1
+  url_launcher: ^6.0.18
   
 
 dev_dependencies:

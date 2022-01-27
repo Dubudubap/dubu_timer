@@ -44,35 +44,39 @@ class _shopState extends State<shop> {
 
   Widget buildShoppingCard(shopping Shopping) {
     return Column(children: [
-      Card(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            side: BorderSide(
-              color: Colors.black,
-              width: 5.0,
-            )),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: <Widget>[
-              Image(image: AssetImage(Shopping.imageUrl)),
-            ],
+      SizedBox(
+        height: 270,
+        width: 270,
+        child: Card(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              side: BorderSide(
+                color: Colors.black,
+                width: 5.0,
+              )),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              children: <Widget>[
+                Image(image: AssetImage(Shopping.imageUrl)),
+              ],
+            ),
           ),
         ),
       ),
       OutlinedButton(
-          onPressed:
-              Shopping.inStock == true && context.watch<Counts>().count >= 3600
-                  ? () {
-                      context.read<Counts>().remove(3600);
-                      Shopping.inStock = false;
-                      ownedItems.addItem(Shopping.num);
-                      context.read<Item>().UpdateValue(ownedItems.Length());
-                      SaveModelValue();
-                    }
-                  : () {
-                      Shopping.inStock = true;
-                    },
+          onPressed: Shopping.inStock == true &&
+                  context.watch<Counts>().count >= Shopping.price
+              ? () {
+                  context.read<Counts>().remove(Shopping.price.toDouble());
+                  Shopping.inStock = false;
+                  ownedItems.addItem(Shopping.num);
+                  context.read<Item>().UpdateValue(ownedItems.Length());
+                  SaveModelValue();
+                }
+              : () {
+                  Shopping.inStock = true;
+                },
           style: ButtonStyle(
             overlayColor: MaterialStateProperty.all(Colors.transparent),
             side: MaterialStateProperty.all(
@@ -87,7 +91,7 @@ class _shopState extends State<shop> {
                     fontFamily: 'Kitto',
                     color: Colors.black87,
                   ))
-              : Text('Buy',
+              : Text('${Shopping.price} coins',
                   style: TextStyle(
                     fontFamily: 'Kitto',
                     color: Colors.black87,

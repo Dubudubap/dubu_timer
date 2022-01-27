@@ -28,7 +28,6 @@ class _coinState extends State<coin> {
     int id = 1;
     if (box.isNotEmpty) {
       final Item = box.getAt(0);
-      print(id);
     }
     Items = closet.GetItems();
     box.put(
@@ -39,7 +38,6 @@ class _coinState extends State<coin> {
         itemList: Items,
       ),
     );
-    print(Provider.of<Counts>(context, listen: false));
   }
 
   @override
@@ -78,15 +76,11 @@ class _coinState extends State<coin> {
                       width: 20,
                     ),
                     Text(
-                      '  ' + context.watch<Counts>().count.floor().toString(),
+                      '  ' + item!.coins.toString(),
                       style: TextStyle(fontFamily: 'Kitto', fontSize: 15),
                     ),
                   ],
                 ),
-              ),
-              Text(
-                '  ' + item!.coins.toString(),
-                style: TextStyle(fontFamily: 'Kitto', fontSize: 15),
               ),
               SizedBox(
                 height: MediaQuery.of(context).size.height / 6,
@@ -113,19 +107,6 @@ class _coinState extends State<coin> {
                           color: Colors.black87),
                     ),
                   ),
-                  OutlinedButton(
-                    onPressed: () {
-                      context.read<Counts>().add(3600);
-                      SaveModelValue();
-                    },
-                    child: Text(
-                      '3600coins',
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontFamily: 'Kitto',
-                          color: Colors.black87),
-                    ),
-                  )
                 ],
               ),
             ]),

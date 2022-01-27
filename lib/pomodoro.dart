@@ -29,8 +29,8 @@ class _PomodoroState extends State<Pomodoro> {
       setState(() {
         elapsedTime = transformMilliSeconds(watch.elapsedMilliseconds);
       });
-      if (coinCount == 360000) {
-        context.read<Counts>().add(1);
+      if (coinCount == 60000) {
+        context.read<Counts>().add(20);
         coinCount = 0;
       } else {
         coinCount = coinCount + 10;

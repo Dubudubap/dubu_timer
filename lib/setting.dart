@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:dubu_timer/provider/global_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:simple_url_preview/simple_url_preview.dart';
 
 class setting extends StatefulWidget {
   const setting({Key? key}) : super(key: key);
@@ -34,7 +33,7 @@ class _settingState extends State<setting> {
     String minsStr = (minutes % 60).toString();
     String secsStr = (seconds % 60).toString();
 
-    return "$daysStr Day(s) $hoursStr Hour(s)\n$minsStr Minute(s)\n$secsStr Seconds(s)";
+    return "$daysStr Day(s) $hoursStr Hour(s)\n$minsStr Minute(s)";
   }
 
   convert(int value) {
@@ -72,64 +71,64 @@ class _settingState extends State<setting> {
                   ? Text(
                       'NO MEOW',
                       style: TextStyle(
-                        fontFamily: 'Kitto',
                         fontSize: 15,
+                        fontFamily: 'ShortStack',
+                        fontWeight: FontWeight.bold,
                         color: Colors.black87,
                       ),
                     )
                   : Text(
                       'MEOW',
                       style: TextStyle(
-                        fontFamily: 'Kitto',
                         fontSize: 15,
+                        fontFamily: 'ShortStack',
+                        fontWeight: FontWeight.bold,
                         color: Colors.black87,
                       ),
                     ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'FRESH BUTLER',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontFamily: 'ShortStack',
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                )
+              ],
             ),
             Column(
               children: [
                 Text(
                   'Your Focus Time',
-                  style: TextStyle(fontFamily: 'Kitto', fontSize: 15),
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontFamily: 'ShortStack',
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
                 ),
                 SizedBox(height: 3.0),
                 Text(
                   transformMilliSeconds(context.watch<Times>().totalTime),
-                  style: TextStyle(fontFamily: 'Kitto', fontSize: 15),
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontFamily: 'ShortStack',
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
                 ),
               ],
             ),
-            OutlinedButton(
-                onPressed: () {
-                  openURL();
-                },
-                style: ButtonStyle(
-                  overlayColor: MaterialStateProperty.all(Colors.transparent),
-                  side: MaterialStateProperty.all(
-                      BorderSide(color: Colors.black87, width: 3)),
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  )),
-                ),
-                child: SizedBox(
-                  width: 120,
-                  height: 20,
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Image.asset(
-                          'assets/camera.png',
-                          height: 20,
-                          width: 20,
-                        ),
-                        Text('@dubudubap',
-                            style: TextStyle(
-                              fontFamily: 'Kitto',
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black87,
-                            )),
-                      ]),
-                ))
+            IconButton(
+              onPressed: () => openURL(),
+              icon: Image.asset('assets/camera.png'),
+              iconSize: 15,
+            )
           ],
         ),
       ),

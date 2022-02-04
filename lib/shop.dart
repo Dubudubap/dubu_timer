@@ -52,7 +52,7 @@ class _shopState extends State<shop> {
               borderRadius: BorderRadius.circular(10.0),
               side: BorderSide(
                 color: Colors.black,
-                width: 5.0,
+                width: 2,
               )),
           child: Padding(
             padding: const EdgeInsets.all(10.0),
@@ -65,37 +65,46 @@ class _shopState extends State<shop> {
         ),
       ),
       OutlinedButton(
-          onPressed: Shopping.inStock == true &&
-                  context.watch<Counts>().count >= Shopping.price
-              ? () {
-                  context.read<Counts>().remove(Shopping.price.toDouble());
-                  Shopping.inStock = false;
-                  ownedItems.addItem(Shopping.num);
-                  context.read<Item>().UpdateValue(ownedItems.Length());
-                  SaveModelValue();
-                }
-              : () {
-                  Shopping.inStock = true;
-                },
-          style: ButtonStyle(
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
-            side: MaterialStateProperty.all(
-                BorderSide(color: Colors.black87, width: 4)),
-            shape: MaterialStateProperty.all(RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
-            )),
-          ),
-          child: ownedItems.contains(Shopping.num)
-              ? Text('Owned',
-                  style: TextStyle(
-                    fontFamily: 'Kitto',
-                    color: Colors.black87,
-                  ))
-              : Text('${Shopping.price} coins',
-                  style: TextStyle(
-                    fontFamily: 'Kitto',
-                    color: Colors.black87,
-                  )))
+        onPressed: Shopping.inStock == true &&
+                context.watch<Counts>().count >= Shopping.price
+            ? () {
+                context.read<Counts>().remove(Shopping.price.toDouble());
+                Shopping.inStock = false;
+                ownedItems.addItem(Shopping.num);
+                context.read<Item>().UpdateValue(ownedItems.Length());
+                SaveModelValue();
+              }
+            : () {
+                Shopping.inStock = true;
+              },
+        style: ButtonStyle(
+          overlayColor: MaterialStateProperty.all(Colors.transparent),
+          side: MaterialStateProperty.all(
+              BorderSide(color: Colors.black87, width: 2)),
+          shape: MaterialStateProperty.all(RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          )),
+        ),
+        child: ownedItems.contains(Shopping.num)
+            ? Text(
+                'Owned',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontFamily: 'ShortStack',
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              )
+            : Text(
+                '${Shopping.price} coins',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontFamily: 'ShortStack',
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+      ),
     ]);
   }
 

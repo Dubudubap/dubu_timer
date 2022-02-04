@@ -96,6 +96,19 @@ class Item extends ChangeNotifier {
   }
 }
 
+class Lang extends ChangeNotifier {
+  int lang = 0;
+
+  ChangeLang() {
+    if (lang == 0) {
+      lang = 1;
+    } else {
+      lang = 0;
+    }
+    notifyListeners();
+  }
+}
+
 class ItemList {
   List<String> itemList = [
     'assets/null.png',

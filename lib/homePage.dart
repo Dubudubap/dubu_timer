@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> {
             valueListenable: Hive.box<HiveModel>('hiveModel').listenable(),
             builder: (context, Box<HiveModel> box, child) {
               SaveModelValue();
-              final item = box.getAt(0);
+              ;
               return Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
@@ -72,8 +72,7 @@ class _HomePageState extends State<HomePage> {
                         highlightColor: Colors.transparent,
                         alignment: Alignment.topRight,
                         onPressed: () {
-                          context.read<Times>().update(item!.totalTime);
-                          print(item.totalTime);
+                          context.read<Times>().update(box.getAt(0)!.totalTime);
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) => setting()));
                         },
@@ -84,8 +83,9 @@ class _HomePageState extends State<HomePage> {
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         onPressed: () {
-                          context.read<Counts>().update(item!.coins.toDouble());
-                          print(item.coins);
+                          context
+                              .read<Counts>()
+                              .update(box.getAt(0)!.coins.toDouble());
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) => coin()));
                         },
@@ -126,9 +126,10 @@ class _HomePageState extends State<HomePage> {
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         onPressed: () {
-                          closet.Update(item!.itemList);
-                          print(item.itemList);
-                          context.read<Counts>().update(item.coins.toDouble());
+                          closet.Update(box.getAt(0)!.itemList);
+                          context
+                              .read<Counts>()
+                              .update(box.getAt(0)!.coins.toDouble());
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) => shop()));
                         },
@@ -139,7 +140,7 @@ class _HomePageState extends State<HomePage> {
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         onPressed: () {
-                          closet.Update(item!.itemList);
+                          closet.Update(box.getAt(0)!.itemList);
                           Swapping();
                         },
                         icon: Image.asset('assets/refresh.png'),

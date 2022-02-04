@@ -99,8 +99,15 @@ class _PomodoroState extends State<Pomodoro> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(elapsedTime,
-                  style: TextStyle(fontFamily: 'Kitto', fontSize: 25.0)),
+              Text(
+                elapsedTime,
+                style: TextStyle(
+                  fontSize: 25,
+                  fontFamily: 'ShortStack',
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
               SizedBox(height: 20.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

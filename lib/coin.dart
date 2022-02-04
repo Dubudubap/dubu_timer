@@ -1,6 +1,7 @@
 import 'package:dubu_timer/hive_model.dart';
 import 'package:flutter/material.dart';
 import 'package:dubu_timer/provider/global_provider.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -12,6 +13,63 @@ class coin extends StatefulWidget {
 }
 
 class _coinState extends State<coin> {
+  int maxAttempts = 3;
+
+  RewardedAd? rewardedAd;
+  int rewardedAdAttempts = 0;
+
+  static const AdRequest request = AdRequest();
+
+  void createRewardedAd() {
+    RewardedAd.load(
+      adUnitId: RewardedAd.testAdUnitId,
+      request: request,
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (ad) {
+          rewardedAd = ad;
+          rewardedAdAttempts = 0;
+        },
+        onAdFailedToLoad: (error) {
+          rewardedAdAttempts++;
+          rewardedAd = null;
+          print('failed to load ${error.message}');
+
+          if (rewardedAdAttempts <= maxAttempts) {
+            createRewardedAd();
+          }
+        },
+      ),
+    );
+  }
+
+  void showRewardedAd() {
+    if (rewardedAd == null) {
+      print('trying to show before loading');
+      return;
+    }
+
+    rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
+      onAdShowedFullScreenContent: (ad) => print('ad showed $ad'),
+      onAdDismissedFullScreenContent: (ad) {
+        ad.dispose();
+        createRewardedAd();
+      },
+      onAdFailedToShowFullScreenContent: (ad, error) {
+        ad.dispose();
+        print('failed to show the ad $ad');
+
+        createRewardedAd();
+      },
+    );
+
+    rewardedAd!.show(onUserEarnedReward: (ad, reward) {
+      print('reward video ${reward.amount} ${reward.type}');
+      context.read<Counts>().add(reward.amount.toDouble());
+    });
+
+    rewardedAd = null;
+  }
+
   List Items = [];
   var closet;
   late DynamicList listClass;
@@ -21,6 +79,7 @@ class _coinState extends State<coin> {
     super.initState();
     closet = Provider.of<ListProvider>(context, listen: false);
     listClass = DynamicList(closet.items);
+    createRewardedAd();
   }
 
   Future<void> SaveModelValue() async {
@@ -60,10 +119,6 @@ class _coinState extends State<coin> {
             ),
             body:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text(
-                'You Have',
-                style: TextStyle(fontFamily: 'Kitto'),
-              ),
               Container(
                 height: 20,
                 width: MediaQuery.of(context).size.width,
@@ -77,7 +132,12 @@ class _coinState extends State<coin> {
                     ),
                     Text(
                       '  ' + item!.coins.toString(),
-                      style: TextStyle(fontFamily: 'Kitto', fontSize: 15),
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: 'ShortStack',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
                     ),
                   ],
                 ),
@@ -88,25 +148,38 @@ class _coinState extends State<coin> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'Donate for Animal Associations!',
-                    style: TextStyle(fontSize: 15, fontFamily: 'Kitto'),
-                  ),
-                  SizedBox(
-                    height: 3,
-                  ),
                   OutlinedButton(
-                    onPressed: () {
-                      print('donate');
-                    },
-                    child: Text(
-                      'DONATE',
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontFamily: 'Kitto',
-                          color: Colors.black87),
-                    ),
-                  ),
+                      onPressed: () {
+                        showRewardedAd();
+                      },
+                      style: ButtonStyle(
+                        overlayColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                        side: MaterialStateProperty.all(
+                            BorderSide(color: Colors.black87, width: 3)),
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        )),
+                      ),
+                      child: SizedBox(
+                        width: 250,
+                        height: 30,
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/tv.png',
+                                height: 20,
+                                width: 20,
+                              ),
+                              Text('  Get 100 coins',
+                                  style: TextStyle(
+                                    fontFamily: 'ShortStack',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  )),
+                            ]),
+                      )),
                 ],
               ),
             ]),

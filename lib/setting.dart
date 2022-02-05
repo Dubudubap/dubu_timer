@@ -19,6 +19,30 @@ class _settingState extends State<setting> {
     }
   }
 
+  String yourTitle() {
+    String _yourTitle = 'STRANGER';
+
+    int milliseconds = context.read<Times>().totalTime;
+    int hundreds = (milliseconds / 10).truncate();
+    int seconds = (hundreds / 100).truncate();
+    int minutes = (seconds / 60).truncate();
+    int hours = (minutes / 60).truncate();
+
+    if (10 > hours && hours >= 1) {
+      _yourTitle = 'BABY BUTLER';
+    } else if (100 > hours && hours >= 10) {
+      _yourTitle = 'JUNIOR BUTLER';
+    } else if (500 > hours && hours >= 100) {
+      _yourTitle = 'SENIOR BUTLER';
+    } else if (1000 > hours && hours >= 500) {
+      _yourTitle = 'MASTER BUTLER';
+    } else if (hours >= 1000) {
+      _yourTitle = 'A KING OF BUTLERS';
+    }
+
+    return _yourTitle;
+  }
+
   bool value = false;
 
   transformMilliSeconds(int milliseconds) {
@@ -33,7 +57,7 @@ class _settingState extends State<setting> {
     String minsStr = (minutes % 60).toString();
     String secsStr = (seconds % 60).toString();
 
-    return "$daysStr Day(s) $hoursStr Hour(s)\n$minsStr Minute(s)";
+    return "$daysStr Day(s) $hoursStr Hour(s)\n$minsStr Minute(s)\n$secsStr";
   }
 
   convert(int value) {
@@ -91,7 +115,7 @@ class _settingState extends State<setting> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'FRESH BUTLER',
+                  yourTitle(),
                   style: TextStyle(
                     fontSize: 15,
                     fontFamily: 'ShortStack',

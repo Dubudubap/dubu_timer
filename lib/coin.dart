@@ -64,7 +64,7 @@ class _coinState extends State<coin> {
 
     rewardedAd!.show(onUserEarnedReward: (ad, reward) {
       print('reward video ${reward.amount} ${reward.type}');
-      context.read<Counts>().add(reward.amount.toDouble());
+      context.read<Counts>().add((reward.amount.toDouble()));
     });
 
     rewardedAd = null;

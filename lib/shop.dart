@@ -4,6 +4,7 @@ import 'package:dubu_timer/provider/global_provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:dubu_timer/shopping.dart';
+import 'package:dubu_timer/coin.dart';
 
 class shop extends StatefulWidget {
   const shop({Key? key}) : super(key: key);
@@ -110,29 +111,61 @@ class _shopState extends State<shop> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            print(ownedItems);
-            Navigator.of(context).pop();
-          },
-        ),
-      ),
-      body: SafeArea(
-        child: ListView.builder(
-          itemCount: shopping.samples.length,
-          itemBuilder: (BuildContext context, int index) {
-            return buildShoppingCard(shopping.samples[index]);
-          },
-        ),
-      ),
-    );
+    return ValueListenableBuilder(
+        valueListenable: Hive.box<HiveModel>('hiveModel').listenable(),
+        builder: (context, Box<HiveModel> box, child) {
+          final item = box.getAt(0);
+          return Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              elevation: 0,
+              backgroundColor: Colors.white,
+              leading: IconButton(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                icon: Icon(Icons.arrow_back, color: Colors.black),
+                onPressed: () {
+                  print(ownedItems);
+                  Navigator.of(context).pop();
+                },
+              ),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    onPressed: () {
+                      context
+                          .read<Counts>()
+                          .update(box.getAt(0)!.coins.toDouble());
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (BuildContext context) => coin()));
+                    },
+                    icon: Image.asset('assets/coinPlus.png'),
+                    iconSize: 10,
+                  ),
+                  Text(
+                    item!.coins.toString(),
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontFamily: 'ShortStack',
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            body: SafeArea(
+              child: ListView.builder(
+                itemCount: shopping.samples.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return buildShoppingCard(shopping.samples[index]);
+                },
+              ),
+            ),
+          );
+        });
   }
 }

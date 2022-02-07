@@ -45,21 +45,6 @@ class _settingState extends State<setting> {
 
   bool value = false;
 
-  transformMilliSeconds(int milliseconds) {
-    int hundreds = (milliseconds / 10).truncate();
-    int seconds = (hundreds / 100).truncate();
-    int minutes = (seconds / 60).truncate();
-    int hours = (minutes / 60).truncate();
-    int days = (hours / 24).truncate();
-
-    String hoursStr = (hours % 24).toString();
-    String daysStr = days.toString();
-    String minsStr = (minutes % 60).toString();
-    String secsStr = (seconds % 60).toString();
-
-    return "$daysStr Day(s) $hoursStr Hour(s)\n$minsStr Minute(s)\n$secsStr";
-  }
-
   convert(int value) {
     context.read()<Check>().convert(value);
   }
@@ -125,32 +110,9 @@ class _settingState extends State<setting> {
                 )
               ],
             ),
-            Column(
-              children: [
-                Text(
-                  'Your Focus Time',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontFamily: 'ShortStack',
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-                SizedBox(height: 3.0),
-                Text(
-                  transformMilliSeconds(context.watch<Times>().totalTime),
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontFamily: 'ShortStack',
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-              ],
-            ),
             IconButton(
               onPressed: () => openURL(),
-              icon: Image.asset('assets/camera.png'),
+              icon: Image.asset('assets/insta.png'),
               iconSize: 15,
             )
           ],

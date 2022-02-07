@@ -19,7 +19,7 @@ class shopping {
     shopping(100, "assets/model5.png", true, 5),
     shopping(400, "assets/model6.png", true, 6),
     shopping(900, "assets/model7.png", true, 7),
-    shopping(10000, "assets/model8.png", true, 8),
+    shopping(100000, "assets/model8.png", true, 8),
     shopping(100, "assets/model9.png", true, 9),
     shopping(200, "assets/model10.png", true, 10),
     shopping(100, "assets/model11.png", true, 11),

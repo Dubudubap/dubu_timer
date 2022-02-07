@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:dubu_timer/shop.dart';
 import 'package:dubu_timer/setting.dart';
 import 'package:dubu_timer/pomodoro.dart';
-import 'package:dubu_timer/coin.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:dubu_timer/statistic.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -48,6 +48,7 @@ class _HomePageState extends State<HomePage> {
         itemList: closet.GetItems(),
       ),
     );
+    print('hive works in homepage');
   }
 
   @override
@@ -60,7 +61,6 @@ class _HomePageState extends State<HomePage> {
             valueListenable: Hive.box<HiveModel>('hiveModel').listenable(),
             builder: (context, Box<HiveModel> box, child) {
               SaveModelValue();
-              ;
               return Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
@@ -87,11 +87,12 @@ class _HomePageState extends State<HomePage> {
                               .read<Counts>()
                               .update(box.getAt(0)!.coins.toDouble());
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) => coin()));
+                              builder: (BuildContext context) =>
+                                  const Statistic()));
                         },
-                        icon: Image.asset('assets/coin.png'),
+                        icon: Image.asset('assets/statistic.png'),
                         iconSize: 20,
-                      )
+                      ),
                     ],
                   ),
                   Stack(
@@ -133,7 +134,7 @@ class _HomePageState extends State<HomePage> {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) => shop()));
                         },
-                        icon: Image.asset('assets/bag.png'),
+                        icon: Image.asset('assets/ropa.png'),
                         iconSize: 20,
                       ),
                       IconButton(
@@ -167,7 +168,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Swapping() {
-    Random random = new Random();
+    Random random = Random();
     var itemStocks = random.nextInt(closet.Length());
     ownedItems = closet.GetItems();
     var itemIndex = ownedItems[itemStocks];

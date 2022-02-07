@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:dubu_timer/provider/global_provider.dart';
 
 class Pomodoro extends StatefulWidget {
+  const Pomodoro({Key? key}) : super(key: key);
+
   @override
   _PomodoroState createState() => _PomodoroState();
 }
@@ -36,6 +38,7 @@ class _PomodoroState extends State<Pomodoro> {
         coinCount = coinCount + 10;
       }
       context.read<Times>().timeAdd(100);
+      print('provider works in pomodoro page');
     }
   }
 

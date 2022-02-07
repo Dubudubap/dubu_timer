@@ -180,6 +180,38 @@ class _coinState extends State<coin> {
                                   )),
                             ]),
                       )),
+                  OutlinedButton(
+                      onPressed: () {
+                        context.read<Counts>().add(10000);
+                      },
+                      style: ButtonStyle(
+                        overlayColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                        side: MaterialStateProperty.all(
+                            BorderSide(color: Colors.black87, width: 3)),
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        )),
+                      ),
+                      child: SizedBox(
+                        width: 250,
+                        height: 30,
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/tv.png',
+                                height: 20,
+                                width: 20,
+                              ),
+                              Text('  Get 10000 coins',
+                                  style: TextStyle(
+                                    fontFamily: 'ShortStack',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  )),
+                            ]),
+                      )),
                 ],
               ),
             ]),

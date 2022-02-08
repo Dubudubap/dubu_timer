@@ -75,6 +75,7 @@ class _PomodoroState extends State<Pomodoro> {
         coins: context.read<Counts>().count.floor(),
         totalTime: context.read<Times>().totalTime,
         itemList: Items,
+        lang: context.read<Lang>().lang,
       ),
     );
     print(Provider.of<Counts>(context, listen: false));

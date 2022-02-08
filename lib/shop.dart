@@ -38,75 +38,96 @@ class _shopState extends State<shop> {
         coins: context.read<Counts>().count.floor(),
         totalTime: context.read<Times>().totalTime,
         itemList: ownedItems.GetItems(),
+        lang: context.read<Lang>().lang,
       ),
     );
     print(ownedItems.GetItems());
   }
 
   Widget buildShoppingCard(shopping Shopping) {
-    return Column(children: [
-      SizedBox(
-        height: 270,
-        width: 270,
-        child: Card(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              side: BorderSide(
-                color: Colors.black,
-                width: 2,
-              )),
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              children: <Widget>[
-                Image(image: AssetImage(Shopping.imageUrl)),
-              ],
-            ),
-          ),
-        ),
-      ),
-      OutlinedButton(
-        onPressed: Shopping.inStock == true &&
-                context.watch<Counts>().count >= Shopping.price
-            ? () {
-                context.read<Counts>().remove(Shopping.price.toDouble());
-                Shopping.inStock = false;
-                ownedItems.addItem(Shopping.num);
-                context.read<Item>().UpdateValue(ownedItems.Length());
-                SaveModelValue();
-              }
-            : () {
-                Shopping.inStock = true;
-              },
-        style: ButtonStyle(
-          overlayColor: MaterialStateProperty.all(Colors.transparent),
-          side: MaterialStateProperty.all(
-              BorderSide(color: Colors.black87, width: 2)),
-          shape: MaterialStateProperty.all(RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          )),
-        ),
-        child: ownedItems.contains(Shopping.num)
-            ? Text(
-                'Owned',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontFamily: 'ShortStack',
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+    return ValueListenableBuilder(
+        valueListenable: Hive.box<HiveModel>('hiveModel').listenable(),
+        builder: (context, Box<HiveModel> box, child) {
+          final item = box.getAt(0);
+          return Column(children: [
+            SizedBox(
+              height: 270,
+              width: 270,
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  side: BorderSide(
+                    color: Colors.black,
+                    width: 2,
+                  ),
                 ),
-              )
-            : Text(
-                '${Shopping.price} coins',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontFamily: 'ShortStack',
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    children: <Widget>[
+                      Image(image: AssetImage(Shopping.imageUrl)),
+                    ],
+                  ),
                 ),
               ),
-      ),
-    ]);
+            ),
+            OutlinedButton(
+              onPressed: Shopping.inStock == true &&
+                      item!.coins >= Shopping.price &&
+                      (item.itemList.contains(Shopping.num) == false)
+                  ? () {
+                      context.read<Counts>().update(item.coins.toDouble());
+                      context.read<Counts>().remove(Shopping.price.toDouble());
+                      Shopping.inStock = false;
+                      context.read<ListProvider>().Update(item.itemList);
+                      ownedItems.addItem(Shopping.num);
+                      context.read<Item>().UpdateValue(ownedItems.Length());
+                      SaveModelValue();
+                    }
+                  : () {
+                      Shopping.inStock = true;
+                    },
+              style: ButtonStyle(
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
+                side: MaterialStateProperty.all(
+                    BorderSide(color: Colors.black87, width: 2)),
+                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                )),
+              ),
+              child: (ownedItems.contains(Shopping.num) |
+                      item!.itemList.contains(Shopping.num))
+                  ? (item.lang == 0)
+                      ? Text(
+                          '소유중',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontFamily: 'gangwon',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        )
+                      : Text(
+                          'OWNED',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontFamily: 'ShortStack',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        )
+                  : Text(
+                      '${Shopping.price}',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: 'ShortStack',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+            ),
+          ]);
+        });
   }
 
   @override

@@ -20,6 +20,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => Item()),
         ChangeNotifierProvider<ListProvider>(
             create: (context) => ListProvider()),
+        ChangeNotifierProvider(create: (_) => Lang()),
       ],
       child: MyApp(),
     ),

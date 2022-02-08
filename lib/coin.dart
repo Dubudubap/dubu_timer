@@ -22,7 +22,7 @@ class _coinState extends State<coin> {
 
   void createRewardedAd() {
     RewardedAd.load(
-      adUnitId: RewardedAd.testAdUnitId,
+      adUnitId: 'ca-app-pub-9892296110122964/5366693976',
       request: request,
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {
@@ -65,6 +65,7 @@ class _coinState extends State<coin> {
     rewardedAd!.show(onUserEarnedReward: (ad, reward) {
       print('reward video ${reward.amount} ${reward.type}');
       context.read<Counts>().add((reward.amount.toDouble()));
+      SaveModelValue();
     });
 
     rewardedAd = null;
@@ -95,6 +96,7 @@ class _coinState extends State<coin> {
         coins: context.read<Counts>().count.floor(),
         totalTime: context.read<Times>().totalTime,
         itemList: Items,
+        lang: context.read<Lang>().lang,
       ),
     );
   }
@@ -151,6 +153,7 @@ class _coinState extends State<coin> {
                   OutlinedButton(
                       onPressed: () {
                         showRewardedAd();
+                        SaveModelValue();
                       },
                       style: ButtonStyle(
                         overlayColor:
@@ -172,39 +175,13 @@ class _coinState extends State<coin> {
                                 height: 20,
                                 width: 20,
                               ),
-                              Text('  Get 100 coins',
-                                  style: TextStyle(
-                                    fontFamily: 'ShortStack',
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87,
-                                  )),
-                            ]),
-                      )),
-                  OutlinedButton(
-                      onPressed: () {
-                        context.read<Counts>().add(10000);
-                      },
-                      style: ButtonStyle(
-                        overlayColor:
-                            MaterialStateProperty.all(Colors.transparent),
-                        side: MaterialStateProperty.all(
-                            BorderSide(color: Colors.black87, width: 3)),
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        )),
-                      ),
-                      child: SizedBox(
-                        width: 250,
-                        height: 30,
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
+                              Text('  '),
                               Image.asset(
-                                'assets/tv.png',
+                                'assets/coinPlus.png',
                                 height: 20,
                                 width: 20,
                               ),
-                              Text('  Get 10000 coins',
+                              Text(' 100',
                                   style: TextStyle(
                                     fontFamily: 'ShortStack',
                                     fontWeight: FontWeight.bold,

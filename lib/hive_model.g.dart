@@ -20,19 +20,22 @@ class HiveModelAdapter extends TypeAdapter<HiveModel> {
       coins: fields[0] as int,
       itemList: (fields[2] as List).cast<dynamic>(),
       totalTime: fields[1] as int,
+      lang: fields[3] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, HiveModel obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.coins)
       ..writeByte(1)
       ..write(obj.totalTime)
       ..writeByte(2)
-      ..write(obj.itemList);
+      ..write(obj.itemList)
+      ..writeByte(3)
+      ..write(obj.lang);
   }
 
   @override

@@ -14,9 +14,13 @@ class HiveModel {
   @HiveField(2)
   final List itemList;
 
+  @HiveField(3)
+  final int lang;
+
   HiveModel({
     required this.coins,
     required this.itemList,
     required this.totalTime,
+    required this.lang,
   });
 }

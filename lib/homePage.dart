@@ -46,9 +46,9 @@ class _HomePageState extends State<HomePage> {
         coins: context.read<Counts>().count.floor(),
         totalTime: context.read<Times>().totalTime,
         itemList: closet.GetItems(),
+        lang: context.read<Lang>().lang,
       ),
     );
-    print('hive works in homepage');
   }
 
   @override
@@ -60,7 +60,9 @@ class _HomePageState extends State<HomePage> {
         child: ValueListenableBuilder(
             valueListenable: Hive.box<HiveModel>('hiveModel').listenable(),
             builder: (context, Box<HiveModel> box, child) {
-              SaveModelValue();
+              if (box.isEmpty) {
+                SaveModelValue();
+              }
               return Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
@@ -72,7 +74,6 @@ class _HomePageState extends State<HomePage> {
                         highlightColor: Colors.transparent,
                         alignment: Alignment.topRight,
                         onPressed: () {
-                          context.read<Times>().update(box.getAt(0)!.totalTime);
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) => setting()));
                         },
@@ -83,9 +84,6 @@ class _HomePageState extends State<HomePage> {
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         onPressed: () {
-                          context
-                              .read<Counts>()
-                              .update(box.getAt(0)!.coins.toDouble());
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) =>
                                   const Statistic()));
@@ -127,10 +125,6 @@ class _HomePageState extends State<HomePage> {
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         onPressed: () {
-                          closet.Update(box.getAt(0)!.itemList);
-                          context
-                              .read<Counts>()
-                              .update(box.getAt(0)!.coins.toDouble());
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) => shop()));
                         },

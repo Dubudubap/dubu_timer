@@ -99,12 +99,13 @@ class Item extends ChangeNotifier {
 class Lang extends ChangeNotifier {
   int lang = 0;
 
-  ChangeLang() {
-    if (lang == 0) {
-      lang = 1;
-    } else {
-      lang = 0;
-    }
+  toKor() {
+    lang = 0;
+    notifyListeners();
+  }
+
+  toEng() {
+    lang = 1;
     notifyListeners();
   }
 }

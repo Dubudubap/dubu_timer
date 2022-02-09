@@ -12,5 +12,7 @@ If you find any security vulnerability that has been inadvertently caused by me,
 
 Yours sincerely,
 Ahn Junhyun.
-South Korea.
+
+From South Korea.
+
 thechaffy@gmail.com

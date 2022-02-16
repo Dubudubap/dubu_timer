@@ -21,6 +21,16 @@ class _settingState extends State<setting> {
     }
   }
 
+  review() async {
+    if (await canLaunch(
+        'https://play.google.com/store/apps/details?id=com.dubu.dubu_timer')) {
+      await launch(
+          'https://play.google.com/store/apps/details?id=com.dubu.dubu_timer');
+    } else {
+      throw 'Could Not Launch URL';
+    }
+  }
+
   String yourTitle(int lang) {
     String _yourTitle = '';
 
@@ -142,7 +152,7 @@ class _settingState extends State<setting> {
                             ? Text(
                                 '안 야옹',
                                 style: TextStyle(
-                                  fontSize: 20,
+                                  fontSize: 15,
                                   fontFamily: 'gangwon',
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black87,
@@ -151,7 +161,7 @@ class _settingState extends State<setting> {
                             : Text(
                                 'NO MEOW',
                                 style: TextStyle(
-                                  fontSize: 20,
+                                  fontSize: 15,
                                   fontFamily: 'ShortStack',
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black87,
@@ -161,7 +171,7 @@ class _settingState extends State<setting> {
                             ? Text(
                                 '야옹',
                                 style: TextStyle(
-                                  fontSize: 20,
+                                  fontSize: 15,
                                   fontFamily: 'gangwon',
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black87,
@@ -170,7 +180,7 @@ class _settingState extends State<setting> {
                             : Text(
                                 'MEOW',
                                 style: TextStyle(
-                                  fontSize: 20,
+                                  fontSize: 15,
                                   fontFamily: 'ShortStack',
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black87,
@@ -195,7 +205,7 @@ class _settingState extends State<setting> {
                         ? Text(
                             '한글',
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 15,
                               fontFamily: 'gangwon',
                               fontWeight: FontWeight.bold,
                               color: Colors.black87,
@@ -204,7 +214,7 @@ class _settingState extends State<setting> {
                         : Text(
                             'English',
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 15,
                               fontFamily: 'ShortStack',
                               fontWeight: FontWeight.bold,
                               color: Colors.black87,
@@ -215,7 +225,7 @@ class _settingState extends State<setting> {
                       ? Text(
                           yourTitle(item.lang),
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 15,
                             fontFamily: 'gangwon',
                             fontWeight: FontWeight.bold,
                             color: Colors.black87,
@@ -224,14 +234,16 @@ class _settingState extends State<setting> {
                       : Text(
                           yourTitle(item.lang),
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 15,
                             fontFamily: 'ShortStack',
                             fontWeight: FontWeight.bold,
                             color: Colors.black87,
                           ),
                         ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      review();
+                    },
                     icon: Image.asset('assets/star.png'),
                     iconSize: 10,
                   ),

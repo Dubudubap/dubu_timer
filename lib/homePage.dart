@@ -145,6 +145,7 @@ class _HomePageState extends State<HomePage> {
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         onPressed: () {
+                          context.read<Times>().update(box.getAt(0)!.totalTime);
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) => Pomodoro()));
                         },

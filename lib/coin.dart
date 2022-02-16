@@ -22,7 +22,7 @@ class _coinState extends State<coin> {
 
   void createRewardedAd() {
     RewardedAd.load(
-      adUnitId: 'ca-app-pub-9892296110122964/5366693976',
+      adUnitId: RewardedAd.testAdUnitId,
       request: request,
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {
@@ -122,15 +122,15 @@ class _coinState extends State<coin> {
             body:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Container(
-                height: 20,
+                height: 15,
                 width: MediaQuery.of(context).size.width,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
                       'assets/coin.png',
-                      height: 20,
-                      width: 20,
+                      height: 15,
+                      width: 15,
                     ),
                     Text(
                       '  ' + item!.coins.toString(),

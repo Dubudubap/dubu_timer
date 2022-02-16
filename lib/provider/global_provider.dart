@@ -127,5 +127,8 @@ class ItemList {
     'assets/item12.png',
     'assets/item13.png',
     'assets/item14.png',
+    'assets/item15.png',
+    'assets/item16.png',
+    'assets/item17.png',
   ];
 }

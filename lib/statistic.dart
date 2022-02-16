@@ -29,7 +29,7 @@ class _StatisticState extends State<Statistic> {
     if (lang == 0) {
       timeStr = "$daysStr 일 $hoursStr 시간 $minsStr 분";
     } else {
-      timeStr = "$daysStr Day(s) $hoursStr Hour(s) $minsStr Minute(s)";
+      timeStr = "$daysStr Day(s) $hoursStr Hour(s)\n$minsStr Minute(s)";
     }
 
     return timeStr;
@@ -61,7 +61,7 @@ class _StatisticState extends State<Statistic> {
                           ? Text(
                               '전체 집중 시간',
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 15,
                                 fontFamily: 'gangwon',
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black87,
@@ -70,7 +70,7 @@ class _StatisticState extends State<Statistic> {
                           : Text(
                               'TOTAL FOCUS TIME',
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 15,
                                 fontFamily: 'ShortStack',
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black87,
@@ -81,7 +81,7 @@ class _StatisticState extends State<Statistic> {
                           ? Text(
                               transformMilliSeconds(item.totalTime, item.lang),
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 15,
                                 fontFamily: 'gangwon',
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black87,
@@ -90,11 +90,12 @@ class _StatisticState extends State<Statistic> {
                           : Text(
                               transformMilliSeconds(item.totalTime, item.lang),
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 15,
                                 fontFamily: 'ShortStack',
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black87,
                               ),
+                              textAlign: TextAlign.center,
                             ),
                     ],
                   ),

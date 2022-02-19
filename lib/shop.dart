@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:dubu_timer/hive_model.dart';
 import 'package:flutter/material.dart';
 import 'package:dubu_timer/provider/global_provider.dart';
@@ -58,7 +60,7 @@ class _shopState extends State<shop> {
                   borderRadius: BorderRadius.circular(10.0),
                   side: BorderSide(
                     color: Colors.black,
-                    width: 2,
+                    width: 3,
                   ),
                 ),
                 child: Padding(
@@ -71,7 +73,7 @@ class _shopState extends State<shop> {
                 ),
               ),
             ),
-            OutlinedButton(
+            ElevatedButton(
               onPressed: Shopping.inStock == true &&
                       item!.coins >= Shopping.price &&
                       (item.itemList.contains(Shopping.num) == false)
@@ -87,13 +89,12 @@ class _shopState extends State<shop> {
                   : () {
                       Shopping.inStock = true;
                     },
-              style: ButtonStyle(
-                overlayColor: MaterialStateProperty.all(Colors.transparent),
-                side: MaterialStateProperty.all(
-                    BorderSide(color: Colors.black87, width: 2)),
-                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.white,
+                side: BorderSide(color: Colors.black87, width: 3),
+                shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),
-                )),
+                ),
               ),
               child: (ownedItems.contains(Shopping.num) |
                       item!.itemList.contains(Shopping.num))
@@ -116,13 +117,27 @@ class _shopState extends State<shop> {
                             color: Colors.black87,
                           ),
                         )
-                  : Text(
-                      '${Shopping.price}',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontFamily: 'ShortStack',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                  : SizedBox(
+                      width: 60,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/coin.png',
+                            width: 15,
+                            height: 15,
+                          ),
+                          Text(
+                            '${Shopping.price}',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontFamily: 'ShortStack',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
             ),
@@ -136,54 +151,57 @@ class _shopState extends State<shop> {
         valueListenable: Hive.box<HiveModel>('hiveModel').listenable(),
         builder: (context, Box<HiveModel> box, child) {
           final item = box.getAt(0);
-          return Scaffold(
-            backgroundColor: Colors.white,
-            appBar: AppBar(
-              elevation: 0,
+          return WillPopScope(
+            onWillPop: () async => false,
+            child: Scaffold(
               backgroundColor: Colors.white,
-              leading: IconButton(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                icon: Icon(Icons.arrow_back, color: Colors.black),
-                onPressed: () {
-                  print(ownedItems);
-                  Navigator.of(context).pop();
-                },
-              ),
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    onPressed: () {
-                      context
-                          .read<Counts>()
-                          .update(box.getAt(0)!.coins.toDouble());
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (BuildContext context) => coin()));
-                    },
-                    icon: Image.asset('assets/coinPlus.png'),
-                    iconSize: 10,
-                  ),
-                  Text(
-                    item!.coins.toString(),
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontFamily: 'ShortStack',
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+              appBar: AppBar(
+                elevation: 0,
+                backgroundColor: Colors.white,
+                leading: IconButton(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  icon: Icon(Icons.arrow_back, color: Colors.black),
+                  onPressed: () {
+                    print(ownedItems);
+                    Navigator.of(context).pop();
+                  },
+                ),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onPressed: () {
+                        context
+                            .read<Counts>()
+                            .update(box.getAt(0)!.coins.toDouble());
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) => coin()));
+                      },
+                      icon: Image.asset('assets/coinPlus.png'),
+                      iconSize: 10,
                     ),
-                  ),
-                ],
+                    Text(
+                      item!.coins.toString(),
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: 'ShortStack',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            body: SafeArea(
-              child: ListView.builder(
-                itemCount: shopping.samples.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return buildShoppingCard(shopping.samples[index]);
-                },
+              body: SafeArea(
+                child: ListView.builder(
+                  itemCount: shopping.samples.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return buildShoppingCard(shopping.samples[index]);
+                  },
+                ),
               ),
             ),
           );

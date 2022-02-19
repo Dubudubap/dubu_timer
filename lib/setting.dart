@@ -1,9 +1,13 @@
+import 'package:dubu_timer/homePage.dart';
+import 'package:dubu_timer/tutorial_eng_1.dart';
+import 'package:dubu_timer/tutorial_kor_1.dart';
 import 'package:flutter/material.dart';
 import 'package:dubu_timer/provider/global_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:dubu_timer/hive_model.dart';
+import 'package:get/get.dart';
 
 class setting extends StatefulWidget {
   const setting({Key? key}) : super(key: key);
@@ -35,9 +39,9 @@ class _settingState extends State<setting> {
     String _yourTitle = '';
 
     if (lang == 0) {
-      _yourTitle = '반가워요';
+      _yourTitle = '아직은 어색한 사이';
     } else {
-      _yourTitle = 'Nice to meet you';
+      _yourTitle = 'Stranger';
     }
 
     int milliseconds = context.read<Times>().totalTime;
@@ -72,9 +76,9 @@ class _settingState extends State<setting> {
       }
     } else if (hours >= 1000) {
       if (lang == 0) {
-        _yourTitle = '집사의 왕';
+        _yourTitle = '가족';
       } else {
-        _yourTitle = 'A KING OF BUTLERS';
+        _yourTitle = 'Family';
       }
     }
 
@@ -121,36 +125,89 @@ class _settingState extends State<setting> {
         valueListenable: Hive.box<HiveModel>('hiveModel').listenable(),
         builder: (context, Box<HiveModel> box, child) {
           final item = box.getAt(0);
-          return Scaffold(
-            backgroundColor: Colors.white,
-            appBar: AppBar(
-              elevation: 0,
+          return WillPopScope(
+            onWillPop: () async => false,
+            child: Scaffold(
               backgroundColor: Colors.white,
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back, color: Colors.black),
-                onPressed: () => Navigator.of(context).pop(),
+              appBar: AppBar(
+                elevation: 0,
+                backgroundColor: Colors.white,
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back, color: Colors.black),
+                  onPressed: () => Get.to(() => HomePage()),
+                ),
               ),
-            ),
-            body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  TextButton(
-                    style: ButtonStyle(
-                      overlayColor:
-                          MaterialStateProperty.all(Colors.transparent),
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.white,
+                        elevation: 5,
+                        side: BorderSide(width: 3),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: EdgeInsets.only(
+                          left: 15,
+                          right: 15,
+                          top: 10,
+                          bottom: 10,
+                        ),
+                      ),
+                      onPressed: (context.watch<Check>().check == 0)
+                          ? () {
+                              context.read<Check>().on();
+                            }
+                          : () {
+                              context.read<Check>().off();
+                            },
+                      child: (context.watch<Check>().check == 0)
+                          ? (item!.lang == 0)
+                              ? Text(
+                                  '소리: 끔',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontFamily: 'gangwon',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  ),
+                                )
+                              : Text(
+                                  'Sound: off',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontFamily: 'ShortStack',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  ),
+                                )
+                          : (item!.lang == 0)
+                              ? Text(
+                                  '소리: 켬',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontFamily: 'gangwon',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  ),
+                                )
+                              : Text(
+                                  'Sound: on',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontFamily: 'ShortStack',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  ),
+                                ),
                     ),
-                    onPressed: (context.watch<Check>().check == 0)
-                        ? () {
-                            context.read<Check>().on();
-                          }
-                        : () {
-                            context.read<Check>().off();
-                          },
-                    child: (context.watch<Check>().check == 0)
-                        ? (item!.lang == 0)
+                    Column(
+                      children: [
+                        (item.lang == 0)
                             ? Text(
-                                '안 야옹',
+                                '언어',
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontFamily: 'gangwon',
@@ -159,26 +216,7 @@ class _settingState extends State<setting> {
                                 ),
                               )
                             : Text(
-                                'NO MEOW',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontFamily: 'ShortStack',
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
-                                ),
-                              )
-                        : (item!.lang == 0)
-                            ? Text(
-                                '야옹',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontFamily: 'gangwon',
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
-                                ),
-                              )
-                            : Text(
-                                'MEOW',
+                                'Language',
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontFamily: 'ShortStack',
@@ -186,73 +224,123 @@ class _settingState extends State<setting> {
                                   color: Colors.black87,
                                 ),
                               ),
-                  ),
-                  TextButton(
-                    style: ButtonStyle(
-                      overlayColor:
-                          MaterialStateProperty.all(Colors.transparent),
-                    ),
-                    onPressed: (item.lang == 0)
-                        ? () {
-                            context.read<Lang>().toEng();
-                            SaveModelValue();
-                          }
-                        : () {
-                            context.read<Lang>().toKor();
-                            SaveModelValue();
-                          },
-                    child: (item.lang == 0)
-                        ? Text(
-                            '한글',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontFamily: 'gangwon',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.white,
+                            elevation: 5,
+                            side: BorderSide(width: 3),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                          )
-                        : Text(
-                            'English',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontFamily: 'ShortStack',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
+                            padding: EdgeInsets.only(
+                              left: 10,
+                              right: 10,
+                              top: 5,
+                              bottom: 5,
                             ),
                           ),
-                  ),
-                  (item.lang == 0)
-                      ? Text(
-                          yourTitle(item.lang),
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontFamily: 'gangwon',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
-                        )
-                      : Text(
-                          yourTitle(item.lang),
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontFamily: 'ShortStack',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
+                          onPressed: (item.lang == 0)
+                              ? () {
+                                  context.read<Lang>().toEng();
+                                  context.read<Times>().update(item.totalTime);
+                                  context
+                                      .read<Counts>()
+                                      .update(item.coins.toDouble());
+                                  SaveModelValue();
+                                }
+                              : () {
+                                  context.read<Lang>().toKor();
+                                  context.read<Times>().update(item.totalTime);
+                                  context
+                                      .read<Counts>()
+                                      .update(item.coins.toDouble());
+                                  SaveModelValue();
+                                },
+                          child: (item.lang == 0)
+                              ? Text(
+                                  '한글',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontFamily: 'gangwon',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  ),
+                                )
+                              : Text(
+                                  'English',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontFamily: 'ShortStack',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  ),
+                                ),
                         ),
-                  IconButton(
-                    onPressed: () {
-                      review();
-                    },
-                    icon: Image.asset('assets/star.png'),
-                    iconSize: 10,
-                  ),
-                  IconButton(
-                    onPressed: () => openURL(),
-                    icon: Image.asset('assets/insta.png'),
-                    iconSize: 10,
-                  ),
-                ],
+                      ],
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.white,
+                        elevation: 5,
+                        side: BorderSide(width: 3),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: EdgeInsets.only(
+                          left: 10,
+                          right: 10,
+                          top: 5,
+                          bottom: 5,
+                        ),
+                      ),
+                      onPressed: (item.lang == 0)
+                          ? () {
+                              Get.to(() => TutorialKor1());
+                            }
+                          : () {
+                              Get.to(() => TutorialEng1());
+                            },
+                      child: (item.lang == 0)
+                          ? Text(
+                              '안내서',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontFamily: 'gangwon',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            )
+                          : Text(
+                              'Tutorial',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontFamily: 'ShortStack',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        review();
+                      },
+                      icon: Image.asset('assets/star.png'),
+                      iconSize: 10,
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        if (box.getAt(0)!.itemList.contains(19) == false) {
+                          closet.addItem(19);
+                          context.read<Item>().UpdateValue(closet.Length());
+                          SaveModelValue();
+                        }
+                        openURL();
+                      },
+                      icon: Image.asset('assets/insta.png'),
+                      iconSize: 10,
+                    ),
+                  ],
+                ),
               ),
             ),
           );

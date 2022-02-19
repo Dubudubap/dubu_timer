@@ -16,6 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int touchCount = 0;
   List ownedItems = [];
   var closet;
   late DynamicList listClass;
@@ -51,6 +52,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void ValueUpdate(Box box) {
+    context.read<Counts>().update(box.getAt(0)!.coins.toDouble());
+    context.read<ListProvider>().Update(box.getAt(0)!.itemList);
+    context.read<Times>().update(box.getAt(0)!.totalTime);
+    context.read<Lang>().update(box.getAt(0)!.lang);
+  }
+
   @override
   @override
   Widget build(BuildContext context) {
@@ -64,26 +72,31 @@ class _HomePageState extends State<HomePage> {
                 SaveModelValue();
               }
               return Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       IconButton(
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         alignment: Alignment.topRight,
                         onPressed: () {
+                          ValueUpdate(box);
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) => setting()));
                         },
                         icon: Image.asset('assets/gear.png'),
                         iconSize: 20,
                       ),
+                      SizedBox(
+                        width: 20,
+                      ),
                       IconButton(
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         onPressed: () {
+                          ValueUpdate(box);
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) =>
                                   const Statistic()));
@@ -116,6 +129,26 @@ class _HomePageState extends State<HomePage> {
                         icon: Image.asset('assets/null.png'),
                         iconSize: 270,
                       ),
+                      IconButton(
+                        onPressed: () {
+                          ValueUpdate(box);
+                          if ((touchCount % 10) == 0) {
+                            context.read<Counts>().add(1);
+                            SaveModelValue();
+                          }
+                          if (touchCount == 100) {
+                            closet.addItem(18);
+                            context.read<Item>().UpdateValue(closet.Length());
+                            SaveModelValue();
+                          }
+                          touchCount += 1;
+                          print(touchCount);
+                        },
+                        splashColor: Colors.white,
+                        highlightColor: Colors.white,
+                        icon: Image.asset('assets/null.png'),
+                        iconSize: 270,
+                      ),
                     ],
                   ),
                   Row(
@@ -125,26 +158,38 @@ class _HomePageState extends State<HomePage> {
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         onPressed: () {
+                          ValueUpdate(box);
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) => shop()));
                         },
                         icon: Image.asset('assets/ropa.png'),
                         iconSize: 20,
                       ),
+                      (box.isEmpty == false)
+                          ? (box.getAt(0)!.itemList.length > 1)
+                              ? IconButton(
+                                  splashColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  onPressed: () {
+                                    closet.Update(box.getAt(0)!.itemList);
+                                    Swapping();
+                                  },
+                                  icon: Image.asset('assets/refresh.png'),
+                                  iconSize: 20,
+                                )
+                              : SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                )
+                          : SizedBox(
+                              width: 20,
+                              height: 20,
+                            ),
                       IconButton(
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         onPressed: () {
-                          closet.Update(box.getAt(0)!.itemList);
-                          Swapping();
-                        },
-                        icon: Image.asset('assets/refresh.png'),
-                        iconSize: 20,
-                      ),
-                      IconButton(
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        onPressed: () {
+                          ValueUpdate(box);
                           context.read<Times>().update(box.getAt(0)!.totalTime);
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) => Pomodoro()));

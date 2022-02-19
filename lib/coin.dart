@@ -64,7 +64,7 @@ class _coinState extends State<coin> {
 
     rewardedAd!.show(onUserEarnedReward: (ad, reward) {
       print('reward video ${reward.amount} ${reward.type}');
-      context.read<Counts>().add((reward.amount.toDouble()));
+      context.read<Counts>().add((100));
       SaveModelValue();
     });
 
@@ -118,64 +118,69 @@ class _coinState extends State<coin> {
                   Navigator.of(context).pop();
                 },
               ),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Image.asset(
+                    'assets/coin.png',
+                    height: 25,
+                    width: 25,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    item!.coins.toString(),
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontFamily: 'ShortStack',
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            body:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Container(
-                height: 15,
-                width: MediaQuery.of(context).size.width,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/coin.png',
-                      height: 15,
-                      width: 15,
-                    ),
-                    Text(
-                      '  ' + item!.coins.toString(),
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontFamily: 'ShortStack',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 6,
-              ),
-              Column(
+            body: Center(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  OutlinedButton(
+                  ElevatedButton(
                       onPressed: () {
                         showRewardedAd();
                         SaveModelValue();
                       },
-                      style: ButtonStyle(
-                        overlayColor:
-                            MaterialStateProperty.all(Colors.transparent),
-                        side: MaterialStateProperty.all(
-                            BorderSide(color: Colors.black87, width: 3)),
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.white,
+                        side: BorderSide(color: Colors.black87, width: 3),
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
-                        )),
+                        ),
                       ),
                       child: SizedBox(
-                        width: 250,
-                        height: 30,
+                        width: 150,
+                        height: 50,
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              Text('1 ',
+                                  style: TextStyle(
+                                    fontFamily: 'ShortStack',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  )),
                               Image.asset(
                                 'assets/tv.png',
                                 height: 20,
                                 width: 20,
                               ),
-                              Text('  '),
+                              Text(' = ',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontFamily: 'gangwon',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  )),
                               Image.asset(
                                 'assets/coinPlus.png',
                                 height: 20,
@@ -191,7 +196,7 @@ class _coinState extends State<coin> {
                       )),
                 ],
               ),
-            ]),
+            ),
           );
         });
   }

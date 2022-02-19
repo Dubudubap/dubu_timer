@@ -108,6 +108,11 @@ class Lang extends ChangeNotifier {
     lang = 1;
     notifyListeners();
   }
+
+  update(int value) {
+    lang = value;
+    notifyListeners();
+  }
 }
 
 class ItemList {
@@ -130,5 +135,7 @@ class ItemList {
     'assets/item15.png',
     'assets/item16.png',
     'assets/item17.png',
+    'assets/item18.png',
+    'assets/item19.png',
   ];
 }

@@ -38,6 +38,7 @@ class _PomodoroState extends State<Pomodoro> {
         coinCount = coinCount + 10;
       }
       context.read<Times>().timeAdd(100);
+
       print('provider works in pomodoro page');
     }
   }
@@ -78,6 +79,7 @@ class _PomodoroState extends State<Pomodoro> {
         lang: context.read<Lang>().lang,
       ),
     );
+
     print(Provider.of<Counts>(context, listen: false));
   }
 
@@ -116,15 +118,59 @@ class _PomodoroState extends State<Pomodoro> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  IconButton(
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    onPressed: () => startOrStop(),
-                    icon: Image.asset('assets/button.png'),
-                    iconSize: 50,
-                  )
+                  (startStop)
+                      ? IconButton(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onPressed: () => startWatch(),
+                          icon: Image.asset('assets/start.png'),
+                          iconSize: 50,
+                        )
+                      : IconButton(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onPressed: () => stopWatch(),
+                          icon: Image.asset('assets/pause.png'),
+                          iconSize: 50,
+                        ),
                 ],
-              )
+              ),
+              (startStop && (watch.elapsedMilliseconds != 0))
+                  ? ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Color.fromARGB(255, 252, 244, 141),
+                        elevation: 5,
+                        side: BorderSide(width: 4),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        padding: EdgeInsets.only(
+                          left: 10,
+                          right: 10,
+                          top: 5,
+                          bottom: 5,
+                        ),
+                      ),
+                      onPressed: () {
+                        watch.reset();
+                        int zero = watch.elapsedMilliseconds;
+                        timer!.cancel();
+
+                        setState(() {
+                          elapsedTime = transformMilliSeconds(zero);
+                        });
+                      },
+                      child: Text(
+                        'Reset',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'ShortStack',
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    )
+                  : SizedBox(),
             ],
           ),
         ),
